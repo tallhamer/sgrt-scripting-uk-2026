@@ -1,0 +1,10 @@
+#!/bin/bash
+# repo2docker runs this before the notebook server, with the server's command as "$@".
+#
+# Starts the MapRT emulator in the background (the same command a laptop and Colab use), then
+# hands over. Deliberately not `set -e`: if the emulator fails, Jupyter must still start, so the
+# student sees a notebook whose setup cell explains the problem rather than a session that
+# never opens. The emulator's log is .maprt_emulator/emulator.log.
+cd "$(dirname "${BASH_SOURCE[0]}")/.." || true
+python -m sgrt_workshop.emulator start || echo "start: WARNING, the emulator did not start; see .maprt_emulator/emulator.log" >&2
+exec "$@"

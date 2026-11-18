@@ -1,0 +1,37 @@
+# Written by sgrt-tools' scripts/publish_member.py: edit it there, never in this mirror.
+# A vX.Y.Z tag releases sgrt-scripting-uk-2026 as a GitHub Release. It is not a Python package on PyPI: the
+# release is the tagged source, which Binder and Colab open directly.
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+
+jobs:
+  github-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: The tag matches the version in pyproject.toml
+        shell: python
+        run: |
+          import os, sys, tomllib
+          version = tomllib.load(open("pyproject.toml", "rb"))["project"]["version"]
+          tag = os.environ["GITHUB_REF_NAME"]
+          sys.exit(0 if tag == f"v{version}" else f"tag {tag} != v{version}")
+      - name: Create the GitHub Release (marked Latest)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" \
+            --title "sgrt-scripting-uk-2026 $version" --latest \
+            --notes "The tagged release of sgrt-scripting-uk-2026. Open it on Binder or Colab from the links in the README."

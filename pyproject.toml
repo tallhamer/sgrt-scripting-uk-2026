@@ -1,0 +1,72 @@
+[project]
+name = "sgrt-scripting-uk-2026"
+# The version is the course date: tag v2026.12.0 in the public mirror.
+version = "2026.12.0"
+description = "SGRT Scripting Workshop (UK, December 2026): scripting the Vision RT MapRT API 2.0 in Jupyter notebooks, against a local emulator serving sessions recorded on a real appliance. Teaching only; not a medical device."
+readme = "README.md"
+# Google Colab runs 3.12; Binder is pinned to it in binder/runtime.txt.
+requires-python = ">=3.12,<3.14"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Michael J. Tallhamer" },
+]
+keywords = ["sgrt", "maprt", "radiotherapy", "workshop", "jupyter", "teaching"]
+
+# Exact versions: every student, on every platform, runs the same emulator and client. These are
+# the published PyPI releases, not the copies in the monorepo this is developed in.
+dependencies = [
+    "maprt-emulator==0.1.1",
+    "maprt-client==0.1.1",
+    "httpx2>=2.16",
+    "numpy>=1.26",
+    "pydicom>=3.0",
+    # Every chart and the 3D surfaces: interactive (hover, zoom, turn) in JupyterLab, Binder and Colab.
+    "plotly>=6.0",
+    # Patient surfaces (notebook 04): trimesh reads the OBJ bytes; fast-simplification lets it reduce a
+    # 300,000-face surface to 40,000 before Plotly draws it. Both need only numpy.
+    "trimesh>=4.0",
+    "fast-simplification>=0.1",
+]
+
+[project.scripts]
+# One command for a local install: fetch the packs, start the emulator, open Jupyter Lab.
+sgrt-workshop = "sgrt_workshop.launcher:main"
+
+[dependency-groups]
+# Jupyter Lab for a local install and Binder (binder/requirements.txt is exported with it). Not a
+# dependency of the package: Colab has its own Jupyter, and installing a second one there is slow
+# and can break its kernel.
+lab = [
+    "jupyterlab>=4.2",
+    # Locked with JupyterLab so the two agree: Binder's base image already has a `notebook`, and
+    # one built for an older JupyterLab would be left broken beside ours (seen in a repo2docker
+    # build, 2026-11-10). Binder can open a session in either interface.
+    "notebook>=7.4",
+]
+# The tests (the public mirror's CI installs them with `pip install . --group test`).
+test = [
+    "pytest>=8.0",
+    "nbclient>=0.10",
+    "nbformat>=5.10",
+    "ipykernel>=6.29",
+]
+
+[tool.uv]
+# `uv sync` installs Jupyter and the test tools along with the workshop.
+default-groups = ["lab", "test"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sgrt_workshop"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests", "."]
+addopts = "-ra"

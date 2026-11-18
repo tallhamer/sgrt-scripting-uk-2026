@@ -1,0 +1,12 @@
+#!/bin/bash
+# repo2docker runs this once, when Binder builds the image, after binder/requirements.txt.
+#
+# Installs the workshop from the checkout (--no-deps: requirements.txt already pinned every
+# dependency from uv.lock) and downloads the session packs into packs/, so they are part of the
+# image and every session starts with them. Any failure fails the build: a broken image is
+# obvious; a broken session at 9am is not.
+set -euo pipefail
+
+pip install --no-deps .
+python -m sgrt_workshop.packs
+python -c "import sgrt_workshop, maprt_emulator, maprt_client; print('workshop packages import')"

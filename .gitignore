@@ -1,0 +1,6 @@
+packs/
+.maprt_emulator/
+.ipynb_checkpoints/
+__pycache__/
+.venv/
+recordings/
