@@ -29,6 +29,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 from sgrt_workshop import config
 
@@ -134,17 +135,41 @@ def start(scenario=None, root=None, wait=60.0, port=None):
     """
     if running(root):
         return status(root)
+    # The emulator is launched by a short-lived helper process (this module's `start` command),
+    # never by the caller itself: once the helper exits, the emulator is no one's descendant. A
+    # Jupyter kernel on Windows ends every process below it when it shuts down, so an emulator
+    # restarted in one notebook would otherwise die with that notebook's kernel.
+    preferred = port or config.PORTS[0]
+    ports = [preferred, *(p for p in config.PORTS if p != preferred)]
+    root = root or config.workshop_root()
+    helper = [sys.executable, "-m", "sgrt_workshop.emulator", "start", "--root", str(root),
+              "--ports", ",".join(map(str, ports)), "--wait", str(wait)]
+    if scenario:
+        helper += ["--scenario", scenario]
+    no_window = {"creationflags": subprocess.CREATE_NO_WINDOW} if os.name == "nt" else {}
+    result = subprocess.run(helper, cwd=root, stdin=subprocess.DEVNULL, capture_output=True,  # audit: allow subprocesses - sys.executable
+                            text=True, encoding="utf-8", errors="replace", **no_window)
+    if result.returncode != 0:
+        message = result.stderr.strip().removeprefix("error: ")
+        raise EmulatorError(message or f"the emulator's start helper failed (exit {result.returncode})")
+    return status(root)
+
+
+def _start_here(scenario, root, ports, wait):
+    """Launch the emulator from this process on the first free port of ``ports`` and wait until it
+    answers. Run by the `start` command, the helper :func:`start` uses."""
+    if running(root):
+        return
     packs = config.packs_dir(root)
     if not any(packs.glob("*.zip")):
         raise EmulatorError(f"no packs in {packs}: run `python -m sgrt_workshop.packs` first")
     config.state_dir(root).mkdir(parents=True, exist_ok=True)
-    preferred = port or config.PORTS[0]
-    for candidate in [preferred, *(p for p in config.PORTS if p != preferred)]:
+    for candidate in ports:
         if listening(port=candidate):
             continue  # held by something else: try the next
         process = _launch(scenario, root, candidate)
         if _wait_until_up(process, candidate, root, wait):
-            return status(root)
+            return
         if not listening(port=candidate):  # it failed for its own reasons, not a busy port
             raise EmulatorError(f"the emulator stopped at once (exit {process.returncode}):\n{_tail(root)}")
         # Something took the port between the check and the emulator's start: try the next.
@@ -231,13 +256,19 @@ def main(argv=None):
     sub = parser.add_subparsers(dest="action", required=True)
     start_parser = sub.add_parser("start")
     start_parser.add_argument("--scenario")
+    # Set by start() when it runs this as its helper; Binder's start and Colab use the defaults.
+    start_parser.add_argument("--root", type=Path, help=argparse.SUPPRESS)
+    start_parser.add_argument("--ports", help=argparse.SUPPRESS)
+    start_parser.add_argument("--wait", type=float, default=60.0, help=argparse.SUPPRESS)
     sub.add_parser("stop")
     sub.add_parser("status")
     args = parser.parse_args(argv)
     try:
         if args.action == "start":
-            start(args.scenario)
-            print(f"The emulator is up on {config.api_url()}.")
+            root = args.root or config.workshop_root()
+            ports = [int(p) for p in args.ports.split(",")] if args.ports else list(config.PORTS)
+            _start_here(args.scenario, root, ports, args.wait)
+            print(f"The emulator is up on {config.api_url(root)}.")
         elif args.action == "stop":
             stop()
             print("The emulator is stopped.")

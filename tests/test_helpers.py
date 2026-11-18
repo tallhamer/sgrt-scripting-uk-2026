@@ -4,7 +4,9 @@ import hashlib
 import io
 import shutil
 import socket
+import subprocess
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -115,7 +117,9 @@ def test_each_start_gets_a_new_token(running_emulator):
     second = config.token(ROOT)
     assert first and second and first != second
     assert emulator.ping(root=ROOT)["success"]  # the new token works
-    assert "Token file  .maprt_emulator/token " in emulator.banner(ROOT) and second in emulator.banner(ROOT)
+    # The emulator prints the path the OS way: .maprt_emulator\token on Windows.
+    token_line = f"Token file  {Path('.maprt_emulator', 'token')} "
+    assert token_line in emulator.banner(ROOT) and second in emulator.banner(ROOT)
 
 
 def test_a_restart_into_any_scenario_neither_hangs_nor_spends_the_scenario(running_emulator):
@@ -302,6 +306,29 @@ def test_a_busy_port_moves_the_emulator_to_the_next_and_the_notebooks_follow(tmp
         held.close()
         emulator.stop(root=root)
     assert not emulator.listening(port=free)
+
+
+def test_the_emulator_outlives_the_process_that_started_it(tmp_path, running_emulator):
+    """On Windows a Jupyter kernel ends every process below it when it shuts down (ipykernel's
+    child list has no process-group filter there), so an emulator restarted in notebook 07 died
+    with 07's kernel and notebook 08 found nothing on the port (the mirror's first CI run,
+    2026-11-18). start() launches it through a helper process that exits, so the emulator is no
+    one's descendant. Checked on every OS by doing what that kernel does: kill every descendant."""
+    pytest.importorskip("psutil")
+    root = _second_workshop(tmp_path)
+    (port,) = _free_ports(1)
+    script = ("import sys, psutil\n"
+              "from pathlib import Path\n"
+              "from sgrt_workshop import emulator\n"
+              "emulator.start(root=Path(sys.argv[1]), port=int(sys.argv[2]))\n"
+              "for child in psutil.Process().children(recursive=True):\n"
+              "    child.kill()\n")
+    subprocess.run([sys.executable, "-c", script, str(root), str(port)], check=True, timeout=120)  # audit: allow subprocesses - sys.executable
+    try:
+        assert emulator.running(root)
+        assert emulator.ping(root=root)["success"]
+    finally:
+        emulator.stop(root=root)
 
 
 def test_stop_never_touches_what_holds_the_port_if_it_is_not_ours(tmp_path, monkeypatch):
