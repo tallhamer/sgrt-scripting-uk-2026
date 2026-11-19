@@ -1,7 +1,7 @@
 [project]
 name = "sgrt-scripting-uk-2026"
-# The version is the course date: tag v2026.12.0 in the public mirror.
-version = "2026.12.0"
+# The version is the course date: tag v2026.12.1 in the public mirror.
+version = "2026.12.1"
 description = "SGRT Scripting Workshop (UK, December 2026): scripting the Vision RT MapRT API 2.0 in Jupyter notebooks, against a local emulator serving sessions recorded on a real appliance. Teaching only; not a medical device."
 readme = "README.md"
 # Google Colab runs 3.12; Binder is pinned to it in binder/runtime.txt.

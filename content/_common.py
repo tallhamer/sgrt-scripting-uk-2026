@@ -5,7 +5,7 @@ import textwrap
 #: The public repository and the tag students use. The Colab setup clones it; the Binder badge and
 #: the README link to it.
 REPO_URL = "https://github.com/tallhamer/sgrt-scripting-uk-2026"
-TAG = "v2026.12.0"
+TAG = "v2026.12.1"
 
 #: The first code cell of every notebook. On Colab it installs the workshop, fetches the session
 #: packs and starts the emulator, once per runtime; everywhere else it does nothing, because

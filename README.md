@@ -20,7 +20,7 @@ You don't need to install anything for the first two.
 
 ### 1. Binder (in your browser, nothing to sign in to)
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/tallhamer/sgrt-scripting-uk-2026/v2026.12.0?urlpath=lab/tree/notebooks/00_start_here.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/tallhamer/sgrt-scripting-uk-2026/v2026.12.1?urlpath=lab/tree/notebooks/00_start_here.ipynb)
 
 Click the badge. The first start can take a few minutes while Binder prepares the session; then
 JupyterLab opens on notebook 00, with the emulator already running.
@@ -32,12 +32,14 @@ JupyterLab opens on notebook 00, with the emulator already running.
 ### 2. Google Colab (in your browser, with a Google account)
 
 Open a notebook from the [table below](#the-notebooks) using its **Colab** link, then run its first
-cell (the **setup cell**). The first time, it installs the workshop, downloads the session packs
-and starts the emulator, which takes about a minute; after that each notebook's setup cell is
-quick.
+cell (the **setup cell**). Each notebook runs in its own Colab session, so the first time you run
+the setup cell in a notebook, it installs the workshop, downloads the session packs and starts the
+emulator, which takes about a minute; running it again in the same notebook is quick.
 
 * Run the setup cell **first, in every notebook**. If Colab restarts (**Runtime → Restart
   session**), run it again.
+* Open each notebook in its own browser tab: **Ctrl+click** its Colab link (**Cmd+click** on a
+  Mac). A notebook opened from inside Colab can appear in a side panel instead.
 * To keep your work, use **File → Save a copy in Drive**.
 
 ### 3. Your own laptop
@@ -46,19 +48,30 @@ Install [uv](https://docs.astral.sh/uv/getting-started/installation/) (it instal
 then, in a terminal:
 
 ```console
-git clone --branch v2026.12.0 https://github.com/tallhamer/sgrt-scripting-uk-2026.git
+git clone --branch v2026.12.1 https://github.com/tallhamer/sgrt-scripting-uk-2026.git
 cd sgrt-scripting-uk-2026
 uv run sgrt-workshop
 ```
 
 No `git`? Download the ZIP from
-[the v2026.12.0 release](https://github.com/tallhamer/sgrt-scripting-uk-2026/releases/tag/v2026.12.0),
+[the v2026.12.1 release](https://github.com/tallhamer/sgrt-scripting-uk-2026/releases/tag/v2026.12.1),
 unzip it, and run `uv run sgrt-workshop` inside the folder.
 
 `sgrt-workshop` downloads the session packs (the first time only), starts the emulator and opens
 JupyterLab. Close JupyterLab (or press **Ctrl+C** in the terminal) to stop both. Your notebooks,
 and anything you change in them, stay in the folder. The next section shows what the terminal
 prints, and where to find the emulator's token.
+
+### A few practical notes for the course
+
+* **Your own laptop**, set up with uv, is the recommended way to run the course: the most
+  flexibility for the least effort, and your work stays in the folder.
+* If you'd rather not install anything, **Binder** is the best choice for running the whole course
+  in one sitting, with no runtimes to manage. **Colab** works well as a fallback, or for picking up
+  a single notebook.
+* Colab limits how many runtimes you can have running at once. Before moving on to the next
+  notebook, use **Runtime → Disconnect and delete runtime** on the one you've finished, or close
+  its tab. Otherwise idle runtimes can pile up and Colab may refuse to start a new one.
 
 ## On your own laptop: the terminal and your token
 
@@ -143,15 +156,15 @@ Work through them in order: each builds on the one before.
 
 | # | Notebook | You'll learn | Open in Colab |
 |---|---|---|---|
-| 00 | Start here | how the notebooks work, and what you're talking to | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.0/notebooks/00_start_here.ipynb) |
-| 01 | Setup and token | the three things every call needs, and a first call | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.0/notebooks/01_setup_and_token.ipynb) |
-| 02 | Replies and errors | how MapRT says yes and no; `maprt-client` | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.0/notebooks/02_replies_and_errors.ipynb) |
-| 03 | Treatment rooms | listing rooms, and finding one by machine name | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.0/notebooks/03_treatment_rooms.ipynb) |
-| 04 | Patient surfaces | a patient's surfaces, and a 3D view of one | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.0/notebooks/04_patient_surfaces.ipynb) |
-| 05 | Clearance maps | building a map request from the plan; reading the map | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.0/notebooks/05_clearance_maps.ipynb) |
-| 06 | Beams and plans | checking a plan's beams yourself, and asking MapRT | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.0/notebooks/06_beams_and_plans.ipynb) |
-| 07 | Robustness | timeouts, a busy server, refusals, half a map, recording a session | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.0/notebooks/07_robustness.ipynb) |
-| 08 | Capstone: plan QA across rooms | every beam of a plan in every room, and a report | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.0/notebooks/08_capstone_plan_qa.ipynb) |
+| 00 | Start here | how the notebooks work, and what you're talking to | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.1/notebooks/00_start_here.ipynb) |
+| 01 | Setup and token | the three things every call needs, and a first call | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.1/notebooks/01_setup_and_token.ipynb) |
+| 02 | Replies and errors | how MapRT says yes and no; `maprt-client` | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.1/notebooks/02_replies_and_errors.ipynb) |
+| 03 | Treatment rooms | listing rooms, and finding one by machine name | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.1/notebooks/03_treatment_rooms.ipynb) |
+| 04 | Patient surfaces | a patient's surfaces, and a 3D view of one | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.1/notebooks/04_patient_surfaces.ipynb) |
+| 05 | Clearance maps | building a map request from the plan; reading the map | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.1/notebooks/05_clearance_maps.ipynb) |
+| 06 | Beams and plans | checking a plan's beams yourself, and asking MapRT | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.1/notebooks/06_beams_and_plans.ipynb) |
+| 07 | Robustness | timeouts, a busy server, refusals, half a map, recording a session | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.1/notebooks/07_robustness.ipynb) |
+| 08 | Capstone: plan QA across rooms | every beam of a plan in every room, and a report | [Colab](https://colab.research.google.com/github/tallhamer/sgrt-scripting-uk-2026/blob/v2026.12.1/notebooks/08_capstone_plan_qa.ipynb) |
 
 **Exercises.** Each notebook ends with an optional exercise, an empty cell for your code, and the
 solution, folded away under **Solution (click to open)**. Try it first; open the solution when
