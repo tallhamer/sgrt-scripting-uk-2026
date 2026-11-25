@@ -851,7 +851,7 @@ wheels = [
 
 [[package]]
 name = "maprt-emulator"
-version = "0.1.1"
+version = "0.1.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "fastapi" },
@@ -861,9 +861,9 @@ dependencies = [
     { name = "pydicom" },
     { name = "uvicorn", extra = ["standard"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/bc/53/f9c473411e5a6a505bdbee4cc8efef8f3799691eccd5b82af6ce6b01c0b0/maprt_emulator-0.1.1.tar.gz", hash = "sha256:7dae749e3e7d0a70e7892238c147883ef59ee8b03db67402108382429dc4f7a1", size = 552136, upload-time = "2026-11-11T00:26:54.235Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d1/1b/3ce280c5747dae914590e2b360c3c364a9c7a9045ee29898bcf1241089ca/maprt_emulator-0.1.2.tar.gz", hash = "sha256:f9c9efb9b949cbacd9d502bb5126f6b4865c2ac6eac998f702fe1ab09892016e", size = 555348, upload-time = "2026-11-25T22:51:11.193Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d6/54/e5a4b13524d2eccef7faf47b8bcc7871671b12a1d074d5c61e79bf794dd7/maprt_emulator-0.1.1-py3-none-any.whl", hash = "sha256:0076347b45cd766f19e44e419068ed5b75cfa97fd4af478ac180034b46f6bc04", size = 456523, upload-time = "2026-11-11T00:26:52.652Z" },
+    { url = "https://files.pythonhosted.org/packages/15/5b/ca71510ecfe4db5bf4cc9103a8a8c5ef93d8160ccf2af1ac36fa4a13a316/maprt_emulator-0.1.2-py3-none-any.whl", hash = "sha256:d4d41e2ac8180865f4b0a94ce6c8f60f8eb45248707d4290ac9f5ea939de7342", size = 457780, upload-time = "2026-11-25T22:51:09.579Z" },
 ]
 
 [[package]]
@@ -1549,7 +1549,7 @@ wheels = [
 
 [[package]]
 name = "sgrt-scripting-uk-2026"
-version = "2026.12.1"
+version = "2026.12.2"
 source = { editable = "." }
 default-groups = ["lab", "test"]
 dependencies = [
@@ -1580,7 +1580,7 @@ requires-dist = [
     { name = "fast-simplification", specifier = ">=0.1" },
     { name = "httpx2", specifier = ">=2.16" },
     { name = "maprt-client", specifier = "==0.1.1" },
-    { name = "maprt-emulator", specifier = "==0.1.1" },
+    { name = "maprt-emulator", specifier = "==0.1.2" },
     { name = "numpy", specifier = ">=1.26" },
     { name = "plotly", specifier = ">=6.0" },
     { name = "pydicom", specifier = ">=3.0" },

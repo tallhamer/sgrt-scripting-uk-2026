@@ -1,7 +1,7 @@
 [project]
 name = "sgrt-scripting-uk-2026"
-# The version is the course date: tag v2026.12.1 in the public mirror.
-version = "2026.12.1"
+# The version is the course date: tag v2026.12.2 in the public mirror.
+version = "2026.12.2"
 description = "SGRT Scripting Workshop (UK, December 2026): scripting the Vision RT MapRT API 2.0 in Jupyter notebooks, against a local emulator serving sessions recorded on a real appliance. Teaching only; not a medical device."
 readme = "README.md"
 # Google Colab runs 3.12; Binder is pinned to it in binder/runtime.txt.
@@ -15,7 +15,7 @@ keywords = ["sgrt", "maprt", "radiotherapy", "workshop", "jupyter", "teaching"]
 # Exact versions: every student, on every platform, runs the same emulator and client. These are
 # the published PyPI releases, not the copies in the monorepo this is developed in.
 dependencies = [
-    "maprt-emulator==0.1.1",
+    "maprt-emulator==0.1.2",
     "maprt-client==0.1.1",
     "httpx2>=2.16",
     "numpy>=1.26",
